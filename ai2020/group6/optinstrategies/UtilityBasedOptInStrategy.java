@@ -8,15 +8,10 @@ import geniusweb.actions.Votes;
 
 public abstract class UtilityBasedOptInStrategy implements IOptInStrategy {
 
-	
-	protected BigDecimal upperThreshold;
-	protected BigDecimal lowerThreshold;
 	protected Integer minPower;
 	protected Integer maxPower;
 	
-	public UtilityBasedOptInStrategy ( BigDecimal upperThreshold, BigDecimal lowerThreshold, Integer minPower, Integer maxPower ) {
-		this.upperThreshold = upperThreshold;
-		this.lowerThreshold = lowerThreshold;
+	public UtilityBasedOptInStrategy ( Integer minPower, Integer maxPower ) {
 		this.minPower = minPower;
 		this.maxPower = maxPower;
 	}

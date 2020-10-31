@@ -12,15 +12,10 @@ import geniusweb.actions.Votes;
 
 public abstract class UtilityBasedAcceptanceStrategy implements IAcceptanceStrategy {
 
-	
-	protected BigDecimal upperThreshold;
-	protected BigDecimal lowerThreshold;
 	protected Integer minPower;
 	protected Integer maxPower;
 	
-	public UtilityBasedAcceptanceStrategy ( BigDecimal upperThreshold, BigDecimal lowerThreshold, Integer minPower, Integer maxPower ) {
-		this.upperThreshold = upperThreshold;
-		this.lowerThreshold = lowerThreshold;
+	public UtilityBasedAcceptanceStrategy ( Integer minPower, Integer maxPower ) {
 		this.minPower = minPower;
 		this.maxPower = maxPower;
 	}

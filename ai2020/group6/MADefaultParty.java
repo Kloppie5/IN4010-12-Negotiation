@@ -9,10 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
-
 import ai2020.group6.acceptancestratagies.IAcceptanceStrategy;
 import ai2020.group6.biddingstrategies.IBiddingStrategy;
 import ai2020.group6.opponentmodels.IOpponentModel;
@@ -20,8 +17,6 @@ import ai2020.group6.optinstrategies.IOptInStrategy;
 import geniusweb.actions.Action;
 import geniusweb.actions.Offer;
 import geniusweb.actions.PartyId;
-import geniusweb.actions.Vote;
-import geniusweb.actions.Votes;
 import geniusweb.inform.Finished;
 import geniusweb.inform.Inform;
 import geniusweb.inform.OptIn;
@@ -72,9 +67,9 @@ public abstract class MADefaultParty extends DefaultParty implements MAState {
 	
 	@Override
 	public void notifyChange ( Inform info ) {
-		reporter.log(Level.FINEST, "Recieved Inform["+info.toString()+"]");
+		reporter.log(Level.FINEST, "Recieved Inform["+info+"]");
 		if ( info instanceof Settings ) {
-			handleSettings((Settings) settings); return; }
+			handleSettings((Settings) info); return; }
 		
 		if ( info instanceof YourTurn ) {
 			handleYourTurn(); return; }
@@ -88,11 +83,11 @@ public abstract class MADefaultParty extends DefaultParty implements MAState {
 		if ( info instanceof Finished ) {
 			handleFinished((Finished) info); return; }
 		
-		reporter.log(Level.SEVERE, "Unknown Inform["+info.toString()+"]");
+		reporter.log(Level.SEVERE, "Unknown Inform["+info+"]");
 	}
 
 	public void handleSettings ( Settings settings ) {
-		reporter.log(Level.FINEST, "MADefaultParty handleSettings("+settings.toString()+")");
+		reporter.log(Level.FINEST, "MADefaultParty handleSettings("+settings+")");
 		id = settings.getID();
 		try {
 			profileint = ProfileConnectionFactory.create(settings.getProfile().getURI(), getReporter());
@@ -119,7 +114,7 @@ public abstract class MADefaultParty extends DefaultParty implements MAState {
 		} catch (IOException e) { e.printStackTrace(); }
 	}
 	public void handleVoting ( Voting voting ) {
-		reporter.log(Level.FINEST, "MADefaultParty handleVoting("+voting.toString()+")");
+		reporter.log(Level.FINEST, "MADefaultParty handleVoting("+voting+")");
 		voting.getBids().stream().forEach(offer -> {
 			PartyId oid = offer.getActor();
 			IOpponentModel om = opponentModels.getOrDefault(oid, initNewOpponentModel(settings));
@@ -136,7 +131,7 @@ public abstract class MADefaultParty extends DefaultParty implements MAState {
 		} catch (IOException e) { e.printStackTrace(); }
 	}
 	public void handleOptIn ( OptIn optin ) {
-		reporter.log(Level.FINEST, "MADefaultParty handleOptIn("+optin.toString()+")");
+		reporter.log(Level.FINEST, "MADefaultParty handleOptIn("+optin+")");
 		optin.getVotes().stream().forEach(votes -> {
 			PartyId oid = votes.getActor();
 			IOpponentModel om = opponentModels.get(oid);
@@ -157,7 +152,7 @@ public abstract class MADefaultParty extends DefaultParty implements MAState {
 			progress = ((ProgressRounds) progress).advance();
 	}
 	public void handleFinished ( Finished finished ) {
-		reporter.log(Level.FINEST, "MADefaultParty handleFinished("+finished.toString()+")");
+		reporter.log(Level.FINEST, "MADefaultParty handleFinished("+finished+")");
 		getReporter().log(Level.INFO, "Final ourcome:" + finished);
 	}
 

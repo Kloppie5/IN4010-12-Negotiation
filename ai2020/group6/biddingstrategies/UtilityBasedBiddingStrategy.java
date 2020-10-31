@@ -20,26 +20,23 @@ import tudelft.utilities.immutablelist.ImmutableList;
 
 public abstract class UtilityBasedBiddingStrategy implements IBiddingStrategy {
 
-	
-	protected BigDecimal upperThreshold;
-	protected BigDecimal lowerThreshold;
 	protected Integer minPower;
 	protected Integer maxPower;
 	
-	public UtilityBasedBiddingStrategy ( BigDecimal upperThreshold, BigDecimal lowerThreshold, Integer minPower, Integer maxPower ) {
-		this.upperThreshold = upperThreshold;
-		this.lowerThreshold = lowerThreshold;
+	public UtilityBasedBiddingStrategy ( Integer minPower, Integer maxPower ) {
 		this.minPower = minPower;
 		this.maxPower = maxPower;
 	}
 	
-	public abstract BigDecimal getUtilityThreshold ( MAState state );
+	public abstract BigDecimal getUpperUtilityThreshold ( MAState state );
+	public abstract BigDecimal getLowerUtilityThreshold ( MAState state );
 
 	@Override
 	public Bid generateBid(MAState state) {
-		BigDecimal util = getUtilityThreshold(state);
+		BigDecimal upperThreshold = getUpperUtilityThreshold(state);
+		BigDecimal lowerThreshold = getLowerUtilityThreshold(state);
 		BidsWithUtility bidutils = new BidsWithUtility((LinearAdditive) state.getUtilitySpace());
-		ImmutableList<Bid> bids = bidutils.getBids(new Interval(util, upperThreshold));
+		ImmutableList<Bid> bids = bidutils.getBids(new Interval(lowerThreshold, upperThreshold));
 		if ( bids.size().intValue() == 0 )
 			return bidutils.getExtremeBid(true);
 		int i = (new Random()).nextInt(bids.size().intValue());
