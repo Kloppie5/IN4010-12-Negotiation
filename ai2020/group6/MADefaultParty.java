@@ -5,14 +5,13 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import ai2020.group6.acceptancestratagies.IAcceptanceStrategy;
 import ai2020.group6.biddingstrategies.IBiddingStrategy;
-import ai2020.group6.opponentmodels.IOpponentModel;
+//import ai2020.group6.opponentmodels.IOpponentModel;
 import ai2020.group6.optinstrategies.IOptInStrategy;
 import geniusweb.actions.Action;
 import geniusweb.actions.Offer;
@@ -54,8 +53,9 @@ public abstract class MADefaultParty extends DefaultParty implements MAState {
 	public IOptInStrategy optinStrategy;
 	protected abstract IOptInStrategy getOptInStrategy ( Settings settings );
 	
-	public Map<PartyId, IOpponentModel> opponentModels;
-	protected abstract IOpponentModel initNewOpponentModel ( Settings settings ) ;
+	// public Map<PartyId, IOpponentModel> opponentModels;
+	// protected abstract IOpponentModel initNewOpponentModel ( Settings settings ) ;
+	public Map<PartyId, Integer> powers;
 	
 	public MADefaultParty ( ) {
 		super();
@@ -67,7 +67,7 @@ public abstract class MADefaultParty extends DefaultParty implements MAState {
 	
 	@Override
 	public void notifyChange ( Inform info ) {
-		reporter.log(Level.FINEST, "Recieved Inform["+info+"]");
+		reporter.log(Level.FINEST, "Received Inform["+info+"]");
 		if ( info instanceof Settings ) {
 			handleSettings((Settings) info); return; }
 		
@@ -100,7 +100,7 @@ public abstract class MADefaultParty extends DefaultParty implements MAState {
 		acceptanceStrategy = getAccceptanceStrategy(settings);
 		biddingStrategy = getBiddingStrategy(settings);
 		optinStrategy = getOptInStrategy(settings);
-		opponentModels = new HashMap<PartyId, IOpponentModel>();
+		// opponentModels = new HashMap<PartyId, IOpponentModel>();
 	}
 	public void handleYourTurn ( ) {
 		reporter.log(Level.FINEST, "MADefaultParty handleYourTurn()");
@@ -115,12 +115,14 @@ public abstract class MADefaultParty extends DefaultParty implements MAState {
 	}
 	public void handleVoting ( Voting voting ) {
 		reporter.log(Level.FINEST, "MADefaultParty handleVoting("+voting+")");
-		voting.getBids().stream().forEach(offer -> {
-			PartyId oid = offer.getActor();
-			IOpponentModel om = opponentModels.getOrDefault(oid, initNewOpponentModel(settings));
-			IOpponentModel nom = om.updateOpponentModel(this, offer);
-			opponentModels.replace(oid, nom);
-		});
+		// voting.getBids().stream().forEach(offer -> {
+		// 	PartyId oid = offer.getActor();
+		// 	IOpponentModel om = opponentModels.getOrDefault(oid, initNewOpponentModel(settings));
+		// 	IOpponentModel nom = om.updateOpponentModel(this, offer);
+		// 	opponentModels.replace(oid, nom);
+		// });
+		
+		powers = voting.getPowers();
 		
 		Action action = acceptanceStrategy.acceptanceVote(this, voting.getBids());
 		
@@ -132,12 +134,13 @@ public abstract class MADefaultParty extends DefaultParty implements MAState {
 	}
 	public void handleOptIn ( OptIn optin ) {
 		reporter.log(Level.FINEST, "MADefaultParty handleOptIn("+optin+")");
-		optin.getVotes().stream().forEach(votes -> {
-			PartyId oid = votes.getActor();
-			IOpponentModel om = opponentModels.get(oid);
-			IOpponentModel nom = om.updateOpponentModel(this, votes);
-			opponentModels.replace(oid, nom);
-		});
+		// optin.getVotes().stream().forEach(votes -> {
+		// 	PartyId oid = votes.getActor();
+		// 	if (oid.equals(id)) return;
+		// 	IOpponentModel om = opponentModels.get(oid);
+		// 	IOpponentModel nom = om.updateOpponentModel(this, votes);
+		// 	opponentModels.replace(oid, nom);
+		// });
 		
 		
 		Action action = optinStrategy.optInVote(this, optin.getVotes());
@@ -164,6 +167,14 @@ public abstract class MADefaultParty extends DefaultParty implements MAState {
 		try {
 			return profileint.getProfile();
 		} catch (IOException e) { e.printStackTrace(); return null; }
+	}
+	
+	public Action getLastAction ( ) {
+		return actionHistory.get(actionHistory.size()-1);
+	}
+	
+	public Map<PartyId, Integer> getPowerMap ( ) {
+		return powers;
 	}
 	
 	public BigDecimal getProgressTime ( ) {

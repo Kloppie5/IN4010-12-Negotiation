@@ -9,22 +9,25 @@ import ai2020.group6.acceptancestratagies.IAcceptanceStrategy;
 import ai2020.group6.acceptancestratagies.UtilityBasedAcceptanceStrategy;
 import ai2020.group6.biddingstrategies.IBiddingStrategy;
 import ai2020.group6.biddingstrategies.UtilityBasedBiddingStrategy;
+import ai2020.group6.optinstrategies.PowerWeightedOptInStrategy;
 // import ai2020.group6.opponentmodels.EmptyOpponentModel;
 // import ai2020.group6.opponentmodels.IOpponentModel;
 import ai2020.group6.optinstrategies.IOptInStrategy;
 import ai2020.group6.optinstrategies.NoOptInStrategy;
+import geniusweb.actions.Vote;
 import geniusweb.inform.Inform;
 import geniusweb.inform.Settings;
+import geniusweb.issuevalue.Bid;
 import tudelft.utilities.logging.Reporter;
 
-public class MAExponential extends MADefaultParty {
+public class MAPowerWeightedExponential extends MADefaultParty {
 	
-	public MAExponential ( ) {
+	public MAPowerWeightedExponential ( ) {
 		super();
 		reporter.log(Level.FINEST, "MAExponent constructed");
 	}
 	
-	public MAExponential ( Reporter reporter ) {
+	public MAPowerWeightedExponential ( Reporter reporter ) {
 		super(reporter);
 	}
 	
@@ -83,7 +86,27 @@ public class MAExponential extends MADefaultParty {
 	
 	@Override
 	protected IOptInStrategy getOptInStrategy ( Settings settings ) {
-		return new NoOptInStrategy();
+		Object val = settings.getParameters().get("minPower");
+		Integer minvotepower = (val instanceof Integer) ? (Integer) val : 2;
+		val = settings.getParameters().get("maxPower");
+		Integer maxpower = (val instanceof Integer) ? (Integer) val : Integer.MAX_VALUE;
+		val = settings.getParameters().get("lowerThreshold");
+		Double lowerThreshold = (val instanceof Double) ? (Double) val : 0.7;
+		val = settings.getParameters().get("e");
+		Double e = (val instanceof Double) ? (Double) val : 1.0;
+		val = settings.getParameters().get("ve");
+		Double ve = (val instanceof Double) ? (Double) val : 1.0;
+		return new PowerWeightedOptInStrategy() {
+
+			@Override
+			public Vote vote(MAState state, Bid bid, Integer power, Integer minpower) {
+				Double t = state.getProgressTime().doubleValue();
+				if (state.getUtilitySpace().getUtility(bid).doubleValue() * (1+Math.pow(power/(minpower*1.0), ve * Math.pow(1-t, e))) > lowerThreshold )
+					return new Vote(state.getId(), bid, minvotepower, maxpower);
+				return null;
+			}
+			
+		};
 	}
 
 	// @Override
