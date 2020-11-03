@@ -1,11 +1,12 @@
 
 import json
+import matplotlib.pyplot
 import os
 import random
 import subprocess
 import time
 
-DEBUG_PRINT  = True
+DEBUG_PRINT  = False
 
 DOMAINS_DIR  = "domains/"
 LOGS_DIR     = "logs/"
@@ -34,11 +35,7 @@ def randomDomain ( ) :
     print(f'- Domain: {domain}')
     return domain
 parties = [
-    {"partyref": f'classpath:ai2020.group6.parties.MAExponential', "parameters": { "e": 0.05 }},
-    {"partyref": f'classpath:ai2020.group6.parties.MAExponential', "parameters": { "e": 0.4 }},
-    {"partyref": f'classpath:ai2020.group6.parties.MAExponential', "parameters": { "e": 1.0 }},
-    {"partyref": f'classpath:ai2020.group6.parties.MAExponential', "parameters": { "e": 3.0 }},
-    {"partyref": f'classpath:ai2020.group6.parties.MAExponential', "parameters": { "e": 9.0 }},
+    {"partyref": f'classpath:ai2020.group6.parties.MAExponential', "parameters": { "e": 0.3 }},
     {"partyref": f'classpath:geniusweb.exampleparties.boulware.Boulware', "parameters": {}},
     {"partyref": f'classpath:geniusweb.exampleparties.conceder.Conceder', "parameters": {}},
     {"partyref": f'classpath:geniusweb.exampleparties.hardliner.Hardliner', "parameters": {}},
@@ -85,23 +82,27 @@ def calculateUtility ( profile, bid ) :
 
     return util
 
-def generateSession ( name, domain = None, parties = 4 ) :
+def generateSession ( name ) :
     print(f'Generating session {name}')
-    if domain is None:
-        domain = randomDomain()
-    print(f'- Domain: {domain}')
-
-    participants = []
-    for i in range(0,parties):
-        participants.append({
-            "party": randomParty(),
-			"profile": randomProfile(domain)
-        })
 
     with open(f'{SESSIONS_DIR}{name}.json', 'w') as f:
         json.dump({
             "MOPACSettings": {
-                "participants" : participants,
+                "participants" : [
+                    {
+                        "party": randomParty(),
+                        "profile": domains["domains/party"][0]
+                    }, {
+                        "party": randomParty(),
+                        "profile": domains["domains/party"][1]
+                    }, {
+                        "party": randomParty(),
+                        "profile": domains["domains/party"][2]
+                    }, {
+                        "party": randomParty(),
+                        "profile": domains["domains/party"][3]
+                    }
+                ],
                 "deadline": {
                     "deadlinerounds": {
                         "rounds": 10,
@@ -114,7 +115,7 @@ def generateSession ( name, domain = None, parties = 4 ) :
             }
         }, f, sort_keys=True, indent=4)
 
-def runSession ( name ) :
+def runSession ( name, sleeptime = 1 ) :
     print(f'Running session {name}')
     with open(f'{LOGS_DIR}{name}.txt','w') as f :
         p = subprocess.Popen([
@@ -123,6 +124,8 @@ def runSession ( name ) :
             '.'+
             ';simplerunner-1.5.5-jar-with-dependencies.jar'+
             f';{PARTIES_DIR}maexponential-1.5.5-jar-with-dependencies.jar'+
+            f';{PARTIES_DIR}mamirroredexponential-1.5.5-jar-with-dependencies.jar'+
+            f';{PARTIES_DIR}mapowereightedexponential-1.5.5-jar-with-dependencies.jar'+
             f';{PARTIES_DIR}boulware-1.5.5.jar'+
             f';{PARTIES_DIR}conceder-1.5.5.jar'+
             f';{PARTIES_DIR}hardliner-1.5.5.jar'+
@@ -132,7 +135,7 @@ def runSession ( name ) :
             'geniusweb.simplerunner.NegoRunner',
             f'{SESSIONS_DIR}{name}.json'
         ], stdout=f, stderr=f)
-        time.sleep(1)
+        time.sleep(sleeptime)
         p.kill()
 
 analysis = {}
@@ -141,12 +144,16 @@ def analyseSession ( name ) :
     with open(f'{LOGS_DIR}{name}.txt','r') as f :
         lines = f.readlines()
         datastore = json.loads(lines[-2].split("INFO:protocol ended normally: ")[1])
-        for id, bid in datastore["MOPACState"]["phase"]["OptInPhase"]["partyStates"]["agreements"].items():
-            sid = id.split("_")[-2]
+        for id in datastore["MOPACState"]["partyprofiles"]:
+            sid = f'{"".join([c for c in id.split("_")[-2] if c.isupper()])}_{datastore["MOPACState"]["partyprofiles"][id]["party"]["parameters"]}'
             if not sid in analysis:
                 if DEBUG_PRINT:
                     print(f'Unknown id {sid}, adding to analysis')
                 analysis[sid] = []
+            if not id in datastore["MOPACState"]["phase"]["OptInPhase"]["partyStates"]["agreements"]:
+                analysis[sid].append(0)
+                continue
+            bid = datastore["MOPACState"]["phase"]["OptInPhase"]["partyStates"]["agreements"][id]
             fp = datastore["MOPACState"]["partyprofiles"][id]["profile"]
             with open(fp.split(":")[1],'r') as f :
                 profile = json.load(f)
@@ -155,11 +162,38 @@ def analyseSession ( name ) :
                     print(f'{sid}: {calculateUtility(profile, bid)}')
                 analysis[sid].append(utility)
 
-for i in range(0, 1000):
-    generateSession(i, "domains/party")
-    runSession(i)
-    analyseSession(i)
+def saveanalysis ( filename, analysis ) :
+    print("Saving Analysis")
+    with open(filename, 'w') as f:
+        json.dump(analysis, f)
+
+def boxplotanalysis ( filename ) :
+    with open(filename, 'r') as f:
+        analysis = json.load(f)
+
+    x = []
+    i = []
+    n = []
+    for k, v in sorted(analysis.items()):
+        sid = f'{"".join([c for c in k.split("_")[0] if c.isupper()])}_{k.split("_")[1]}'
+        x.append(v)
+        i.append(len(i)+1)
+        n.append(sid)
+    matplotlib.pyplot.boxplot(x, showmeans=True)
+    matplotlib.pyplot.xticks(i, n)
+    matplotlib.pyplot.show()
+
+for i in range(0, 100):
+    generateSession(f's{i}')
+
+for i in range(0, 100):
+    runSession(f's{i}')
+
+for i in range(0, 100):
+    analyseSession(f's{i}')
+
 time.sleep(1)
-print("Saving Analysis")
-with open('analysis.txt', 'w') as f:
-    json.dump(analysis, f)
+
+saveanalysis("sanalysis.txt", analysis)
+
+boxplotanalysis ( "sanalysis.txt" )
