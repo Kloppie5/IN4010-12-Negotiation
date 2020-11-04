@@ -32,8 +32,6 @@ import geniusweb.profileconnection.ProfileInterface;
 import geniusweb.progress.Progress;
 import geniusweb.progress.ProgressRounds;
 
-import tudelft.utilities.logging.Reporter;
-
 public abstract class MADefaultParty extends DefaultParty implements MAState {
 
 	public PartyId id;
@@ -56,14 +54,6 @@ public abstract class MADefaultParty extends DefaultParty implements MAState {
 	// public Map<PartyId, IOpponentModel> opponentModels;
 	// protected abstract IOpponentModel initNewOpponentModel ( Settings settings ) ;
 	public Map<PartyId, Integer> powers;
-	
-	public MADefaultParty ( ) {
-		super();
-	}
-
-	public MADefaultParty ( Reporter reporter ) {
-		super(reporter);
-	}
 	
 	@Override
 	public void notifyChange ( Inform info ) {

@@ -1,7 +1,6 @@
 package ai2020.group6.parties;
 
 import java.math.BigDecimal;
-import java.util.logging.Level;
 
 import ai2020.group6.MADefaultParty;
 import ai2020.group6.MAState;
@@ -13,26 +12,10 @@ import ai2020.group6.biddingstrategies.UtilityBasedBiddingStrategy;
 // import ai2020.group6.opponentmodels.IOpponentModel;
 import ai2020.group6.optinstrategies.IOptInStrategy;
 import ai2020.group6.optinstrategies.NoOptInStrategy;
-import geniusweb.inform.Inform;
 import geniusweb.inform.Settings;
-import tudelft.utilities.logging.Reporter;
 
 public class MAExponential extends MADefaultParty {
-	
-	public MAExponential ( ) {
-		super();
-		reporter.log(Level.FINEST, "MAExponent constructed");
-	}
-	
-	public MAExponential ( Reporter reporter ) {
-		super(reporter);
-	}
-	
-	@Override
-	public void notifyChange ( Inform info ) {
-		super.notifyChange(info);
-	}
-	
+
 	@Override
 	protected IAcceptanceStrategy getAccceptanceStrategy ( Settings settings ) {
 		Object val = settings.getParameters().get("minPower");

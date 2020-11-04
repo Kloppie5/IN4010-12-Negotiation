@@ -1,17 +1,9 @@
 package ai2020.group6.biddingstrategies;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
-
 import ai2020.group6.MAState;
-import ai2020.group6.acceptancestratagies.IAcceptanceStrategy;
 import ai2020.group6.biddingstrategies.IBiddingStrategy;
-import ai2020.group6.optinstrategies.IOptInStrategy;
-import geniusweb.actions.Offer;
-import geniusweb.actions.Vote;
-import geniusweb.actions.Votes;
 import geniusweb.bidspace.BidsWithUtility;
 import geniusweb.bidspace.Interval;
 import geniusweb.issuevalue.Bid;
