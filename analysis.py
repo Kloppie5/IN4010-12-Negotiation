@@ -122,16 +122,16 @@ def runSession ( name, sleeptime = 1 ) :
             'java',
             '-cp',
             '.'+
-            ';simplerunner-1.5.5-jar-with-dependencies.jar'+
-            f';{PARTIES_DIR}maexponential-1.5.5-jar-with-dependencies.jar'+
-            f';{PARTIES_DIR}mamirroredexponential-1.5.5-jar-with-dependencies.jar'+
-            f';{PARTIES_DIR}mapowereightedexponential-1.5.5-jar-with-dependencies.jar'+
-            f';{PARTIES_DIR}boulware-1.5.5.jar'+
-            f';{PARTIES_DIR}conceder-1.5.5.jar'+
-            f';{PARTIES_DIR}hardliner-1.5.5.jar'+
-            f';{PARTIES_DIR}linear-1.5.5.jar'+
-            f';{PARTIES_DIR}randomparty-1.5.5.jar'+
-            f';{PARTIES_DIR}timedependentparty-1.5.5.jar',
+            ';simplerunner-1.5.6-jar-with-dependencies.jar'+
+            f';{PARTIES_DIR}maexponential-1.5.6-jar-with-dependencies.jar'+
+            f';{PARTIES_DIR}mamirroredexponential-1.5.6-jar-with-dependencies.jar'+
+            f';{PARTIES_DIR}mapowereightedexponential-1.5.6-jar-with-dependencies.jar'+
+            f';{PARTIES_DIR}boulware-1.5.6.jar'+
+            f';{PARTIES_DIR}conceder-1.5.6.jar'+
+            f';{PARTIES_DIR}hardliner-1.5.6.jar'+
+            f';{PARTIES_DIR}linear-1.5.6.jar'+
+            f';{PARTIES_DIR}randomparty-1.5.6.jar'+
+            f';{PARTIES_DIR}timedependentparty-1.5.6.jar',
             'geniusweb.simplerunner.NegoRunner',
             f'{SESSIONS_DIR}{name}.json'
         ], stdout=f, stderr=f)
