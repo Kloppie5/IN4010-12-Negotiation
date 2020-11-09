@@ -10,6 +10,12 @@ import geniusweb.actions.Offer;
 import geniusweb.actions.Vote;
 import geniusweb.actions.Votes;
 
+/**
+ * UtilityBasedAcceptanceStrategy accepts all bids whose utility exceeds the minimum
+ * utility threshold provided by the getUtilityThreshold function.
+ * 
+ * @author Group 6
+ */
 public abstract class UtilityBasedAcceptanceStrategy implements IAcceptanceStrategy {
 
 	protected Integer minPower;

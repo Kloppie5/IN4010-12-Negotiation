@@ -10,6 +10,12 @@ import geniusweb.issuevalue.Bid;
 import geniusweb.profile.utilityspace.LinearAdditive;
 import tudelft.utilities.immutablelist.ImmutableList;
 
+/**
+ * UtilityBasedBiddingStrategy generates random bids that fall between the
+ * thresholds provided by getUpperUtilityThreshold and getLowerUtilityThreshold.
+ * 
+ * @author Group 6
+ */
 public abstract class UtilityBasedBiddingStrategy implements IBiddingStrategy {
 
 	protected Integer minPower;

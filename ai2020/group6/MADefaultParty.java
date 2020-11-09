@@ -32,6 +32,14 @@ import geniusweb.profileconnection.ProfileInterface;
 import geniusweb.progress.Progress;
 import geniusweb.progress.ProgressRounds;
 
+/**
+ * MADefault party is a modular basis for a MOPaC negotiation agent, such that
+ * a new agent only has to define its strategies for the different phases without
+ * having to worry about about the design of the MOPaC negotiation and the
+ * implementation of the MAState interface.
+ * 
+ * @author Group 6
+ */
 public abstract class MADefaultParty extends DefaultParty implements MAState {
 
 	public PartyId id;

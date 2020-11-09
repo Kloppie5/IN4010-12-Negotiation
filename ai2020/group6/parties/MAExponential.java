@@ -14,6 +14,15 @@ import ai2020.group6.optinstrategies.IOptInStrategy;
 import ai2020.group6.optinstrategies.NoOptInStrategy;
 import geniusweb.inform.Settings;
 
+/**
+ * MAExponential accepts and generates bids above a threshold exponentially
+ * decreasing as a function of time.
+ * The threshold starts at the "upperThreshold" (defaulting to 1) and decreases
+ * to the "lowerThreshold" (defaulting to 0) by scaling with (1-t)^e, where t is
+ * the progress over time and e is the parameter "e" (defaulting to 1).
+ * 
+ * @author Group 6
+ */
 public class MAExponential extends MADefaultParty {
 
 	@Override

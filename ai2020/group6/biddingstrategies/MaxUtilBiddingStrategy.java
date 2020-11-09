@@ -5,6 +5,11 @@ import geniusweb.bidspace.BidsWithUtility;
 import geniusweb.issuevalue.Bid;
 import geniusweb.profile.utilityspace.LinearAdditive;
 
+/**
+ * MaxUtilBiddingStrategy only bids the highest utility bid available to this agent.
+ * 
+ * @author Group 6
+ */
 public class MaxUtilBiddingStrategy implements IBiddingStrategy {
 
 	@Override

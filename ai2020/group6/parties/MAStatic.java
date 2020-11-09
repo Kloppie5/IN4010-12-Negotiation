@@ -14,6 +14,15 @@ import ai2020.group6.optinstrategies.IOptInStrategy;
 import ai2020.group6.optinstrategies.NoOptInStrategy;
 import geniusweb.inform.Settings;
 
+/**
+ * MAStatic is an agent that accepts bids that exceed the minimum threshold,
+ * provided to the agent as the "lowerThreshold" parameter (defaulting to 0),
+ * and creates random bids between the minimum and maximum thresholds,
+ * provided to the agent as the "lowerThreshold" and "upperThreshold" parameters
+ * (defaulting to 0 and 1).
+ * 
+ * @author Group 6
+ */
 public class MAStatic extends MADefaultParty {
 	
 	@Override

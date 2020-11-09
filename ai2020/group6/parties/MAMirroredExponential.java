@@ -14,6 +14,27 @@ import ai2020.group6.optinstrategies.IOptInStrategy;
 import ai2020.group6.optinstrategies.NoOptInStrategy;
 import geniusweb.inform.Settings;
 
+/**
+ * MAMirroredExponential accepts and generates bids above a threshold exponentially
+ * decreasing as a function of time.
+ * The threshold starts at the "upperThreshold" (defaulting to 1) and decreases
+ * to the "lowerThreshold" (defaulting to 0) by scaling with 1-t^(1/e), where t is
+ * the progress over time and e is the parameter "e" (defaulting to 1).
+ * 
+ * This is the default behaviour of the exampleparties provided by the geniusweb
+ * framework;
+ * Hardliner:          e = 0'
+ * Boulware:           e = 0.2
+ * Linear:             e = 1
+ * TimeDependentParty: e = 1.2
+ * Conceder:           e = 2
+ * 
+ * ' e = 0 would theoretically give the same result, but is not allowed for this agent,
+ * as this would leave this agent with a static threshold of "upperThreshold" and
+ * is therefore replaceable with the MAStatic agent.
+ * 
+ * @author Group 6
+ */
 public class MAMirroredExponential extends MADefaultParty {
 	
 	@Override

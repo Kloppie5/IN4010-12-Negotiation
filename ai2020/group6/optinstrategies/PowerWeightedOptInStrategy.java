@@ -11,6 +11,12 @@ import geniusweb.actions.Vote;
 import geniusweb.actions.Votes;
 import geniusweb.issuevalue.Bid;
 
+/**
+ * PowerWeightedOptInStrategy collects the amount of power backing a bid such that
+ * more sophisticated strategies could use this.
+ * 
+ * @author Group 6
+ */
 public abstract class PowerWeightedOptInStrategy implements IOptInStrategy {
 
 	public abstract Vote vote ( MAState state, Bid bid, Integer power, Integer minpower );

@@ -16,6 +16,16 @@ import geniusweb.actions.Vote;
 import geniusweb.inform.Settings;
 import geniusweb.issuevalue.Bid;
 
+/**
+ * MAPowerWeightedExponential behaves like the MAExponential agent when it
+ * comes to the acceptance and bidding strategies.
+ * 
+ * During the OptIn phase, this agent scales the utility of a bid with
+ * 1+v^(ve * (1-t)^e)) such that the utility of a bid increases the more
+ * support (v) it has. "ve" and "e" and parameters defaulting to 1.
+ * 
+ * @author Group 6
+ */
 public class MAPowerWeightedExponential extends MADefaultParty {
 	
 	@Override

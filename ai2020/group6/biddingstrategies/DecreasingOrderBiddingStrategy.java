@@ -8,6 +8,12 @@ import ai2020.group6.MAState;
 import geniusweb.issuevalue.Bid;
 import geniusweb.profile.DefaultPartialOrdering;
 
+/**
+ * DecreasingOrderBiddingStrategy generates a sorted list of possible bids and
+ * each round goes down this list.
+ * 
+ * @author Group 6
+ */
 public class DecreasingOrderBiddingStrategy implements IBiddingStrategy {
 	
 	List<Bid> bidlist = null;
