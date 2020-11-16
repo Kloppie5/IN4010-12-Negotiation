@@ -1,0 +1,81 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[left=0.75in,top=0.6in,right=0.75in,bottom=0.6in]{geometry}
+
+\usepackage{adjustbox}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{verbatim}
+
+\usepackage{hyperref}
+
+\usepackage{bera}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\renewcommand{\baselinestretch}{0.9} 
+
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\tolerance=1000
+
+\colorlet{punct}{red!60!black}
+\definecolor{background}{HTML}{EEEEEE}
+\definecolor{delim}{RGB}{20,105,176}
+
+
+\lstdefinelanguage{json}{
+    basicstyle=\normalfont\ttfamily,
+    numbers=left,
+    numberstyle=\scriptsize,
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    breaklines=true,
+    frame=lines,
+    backgroundcolor=\color{background},
+}
+
+\hyphenpenalty=10000
+
+\newcommand{\divider}{\rule{\linewidth}{0.5mm}}
+
+\begin{document}
+
+    \begin{titlepage}
+        \vfill
+    
+        \begin{center}
+    		\textsc{\LARGE TU Delft}\\[1.5cm]
+    		\textsc{\Large Artificial Intelligence Techniques [IN4010-12]}\\[0.5cm]
+    		\textsc{\large Group 6}\\[0.5cm]
+    		
+    		\divider \\[0.4cm]
+    		{ \huge \bfseries
+    		    Problem Solving by Negotiation
+    		}\\[0.4cm]
+    		\divider \\[1.5cm]
+    	
+    	    \large
+    		    Thijs Bolscher - 4656717\\
+                Jeroen Kloppenburg - 4477960\\
+                Wenhao Wang - 5166225\\
+                Zhili Huang - 5205557\\
+                Yimeng Li- 5306469
+    		\vfill
+    		
+    		{\large \today}\\[3cm]
+    	\end{center}
+    \end{titlepage}
+
+    \input{sections/0-Introduction}
+    \newpage
+    \input{sections/1-PreferenceProfile}
+    \input{sections/2-Strategies}
+    %\newpage
+    \input{sections/3-Results}
+    
+    \appendix
+    \input{sections/A-Appendix}
+
+\end{document}

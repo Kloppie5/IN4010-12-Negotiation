@@ -1,0 +1,31 @@
+\section{Preference profiles}
+\label{sec:preferenceprofiles}
+
+    In this section the preference profiles of the participating agents are discussed by the hand of an example.
+
+    Before diving into an actual .txt example of one of the preference files, it is important to understand what aspects should be included in the preference profiles of the participating agents:
+
+    \begin{itemize}
+        \item \textbf{Resistor types:}
+            Firstly, there is the choice of resistors available in the market place. In this case, the buyers can choose between four available transistors. Two of them are named from the company \textit{genericelectronics}, and two from the company \textit{shadyelectronics}. Next, for both companies' resistors, the amount the resistance per resistor can deviate from the specified amount can be either \textit{1\%} or \textit{5\%}. This counts up to a total of 4 resistor 'types'.  %the how much their actually resistance is allowed to deviate from the mentioned amount
+        \item \textbf{Discount:}
+            For all resistors, the scaling system is set at set values (by the selling companies) before the market opens. 
+        \item \textbf{Product type preference}:
+            Each agent has weighted the different types of resistors, ending up with four different weights (that sum up to one) for the four different resistor types.
+        \item \textbf{Utility per scale:}
+            Each agent has different preferences/set utilities for the different scales. 
+    \end{itemize}
+
+    An example party called Buyer A is included in \autoref{app:exampleprofile}.
+
+    To be more specific about Buyer A, from line 7 to line 35, the names and the prices of four kinds of products from these two companies have been listed in this section. This part aims to provide the information of how prices can be influenced by the amount of purchased items. With larger coalitions, higher discount scales are accessed. The price for the desired product is only settled when the total demanded quantity becomes clear. 
+    
+    Buyer A also has a clear preference for the \textit{type} of product. This is indicated from line 40 to line 44 in the example. Clearly, buyer A prefers Shadyelectronics' resistors (weights of 0.4) over Genericelectronics' resistors (weights of 0.1). All different combinations are possible here, as long as the weights count up to one. In this case, the buyer is indifferent to the subtype of the resistor, but he does care about the manufacturer. \\
+    
+    From line 46 to 82, it becomes clear what utilities the buyer assigns to the different scales. Now, with increasing sizes of the possible coalitions, the utility will always increase, as the discount increases. \\
+    
+    Now buyer A's budget and requested amount of product should be included in this preference profile. This is done as follows; for agent A a set maximum budget of $\$30,-$ and a requested amount of 80 pieces were assigned. Now, when a product is too expensive, so when $n_{pieces} * Price_{scale}$ transcends agent A's budget of $\$30,-$, the agent's utility in this scale is set to 0. \\ 
+    
+    Buyer A can be said to have a relatively high budget for this amount of products. This can be concluded from the fact that only twice the utility is set to zero. These zero-utility scales are important reflections of reality, as interested buyers will always have a maximum budget.  
+    
+

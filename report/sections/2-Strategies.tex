@@ -1,0 +1,61 @@
+\section{Strategies}
+\label{sec:strategies}
+
+    As discussed, the MOPaC problem is set up with set phases, all of which contain different strategies for different agents. In order to make agents with arbitrary strategies for the different phases, a modular party MADefaultParty was developed such that an agent can extends it with its own strategies and not have to worry about other details of the MOPaC protocol. In this section, those different strategies are introduced and explained. 
+
+    \subsection{Bidding Phase}
+    \label{subsec:bidding}
+        In the bidding phase, each agent creates a bid that they would find acceptable. This is done by means of a bidding strategy. The most common bidding strategy is creating random bids that satisfy a minimum threshold. 
+        This minimum threshold should decrease over time to make an agent concede, otherwise if all agents keep suggesting their preferred bid, there would be a very small chance of actually achieving a coalition. As will be discussed, some agents concede faster than others. These different conceding strategies will be discussed in \autoref{subsec:conceding}.
+
+    \subsection{Voting Phase}
+    \label{subsec:voting}
+        In the voting phase, each agent looks at all other bids on the table and votes on whether the agent accepts those bids. An agent could for example only accept a bid if it exceeds the minimum threshold of the agent, or it could accept the best couple of bids.
+
+    \subsection{Opt-in Phase}
+    \label{subsec:optin}
+        In the opt-in phase, an agent can again look at all other bids on the table. The difference between this phase and the voting phase is that now, the agent knows the voting result on every bid. Based on this observation, all the power of the agents who voted "accept" can be added up for every bid. This sum of power for one bid could influence the likelihood of the agent reconsidering and accepting a bid. \\
+        For example, in an e-marketplace, where larger coalitions come with larger discounts, buyers could be happier with a larger coalition because it usually gives a higher discount. An agent is therefore more likely to step into an existing coalition that has a lot of summed power behind it and might want to opt-in to this coalition. In \autoref{subsec:conceding}, such a conceding strategy is discussed in more detail.
+        
+    \subsection{Conceding strategies}
+    \label{subsec:conceding}
+        In the previous sections, conceding was described as using a minimum threshold that decreases over time. This conceding is necessary because otherwise oftentimes no coalition can be formed. Keep in mind that coming to an agreement before the deadline is in all agents' interest, so the agents need a personal conceding strategy.\\
+        There are effectively infinite possible conceding strategies. It is therefore impossible to empirically find the best strategies. Three basic strategies were implemented in the modular agent:
+        
+        \subsubsection*{Exponential Strategy}
+            The exponential strategy uses an exponential function to decrease the utility threshold over time. The formula for this way of scaling is depicted as follows:
+            
+            \begin{equation}
+            \label{exponential}
+                T_{new} = T_{lower} + (T_{upper} - T_{lower}) * (1-t)^\alpha
+            \end{equation}
+            
+            with $T_{upper}$ being the initial, highest utility threshold and $T_{lower}$ being the lowest utility threshold reached at the end. $(1-t)^\alpha$ represents the value of scale between $T_{upper}$ and $T_{lower}$. 
+            Note that t is scaled from 0 to 1.\\
+            Now, it can be seen that the value of $\alpha$ is the only set variable here that distinguishes agents. When an agent is designed with the 'exponential strategy' the value of $\alpha$, represents how quickly an agent concedes.\\
+            Some utility versus time plots for some different values of $\alpha$ are shown in \autoref{fig:exp}.
+ 
+            From the figure it becomes clear that as $\alpha$ increases, the agent will concede faster. Low values of $\alpha$ represent rather 'stubborn' agents.\\ Finally, for a value of $\alpha$ of one, the threshold decrease over time becomes linear. The values for $\alpha$ used in the figure, will also be the tested values as discussed in \autoref{sec:results}.
+ 
+        \subsubsection*{Mirrored Exponential Strategy}
+            The mirrored exponential strategy is very similar to the exponential model, apart from the fact that the utility-versus-time function is mirrored over U=t as clearly depicted in \autoref{fig:both}. The function for this conceding strategy is:
+        
+            \begin{equation}
+            \label{mirroredexponential}
+                T_{new} = T_{lower} + (T_{upper} - T_{lower}) * (1-t^\frac{1}{\alpha})
+            \end{equation}
+
+            This model was not tested as a model of our own but was included as this is the default behaviour of many of the parties provided by the GeniusWeb framework. For example, the 'Boulware' party is a relatively stubborn party with $\alpha = 0.2$. 
+        
+        \subsubsection*{Power-Weighted Strategy}
+            The power-weighted strategy is a strategy for the opt-in phase, as it takes into account the sum of power available for every single bid. The power backing a bid is taken into account and increases how favorable an agent thinks of a bid. It reflects the situation in reality, where an agent might tend to favour a coalition that has almost collected the amount of requested products needed for the coalition to end up in a more favourable discount scale. The model is represented by the following formula:
+            
+            \begin{equation}
+            \label{powerpar}
+                U_{new} = U_{original} * ( 1+v^{\beta*(1-t)^\alpha } )
+            \end{equation}
+            
+            where $U_{new}$ is the value of the utility assigned to a bid after considering the sum of power available for that bid. This formula thus represents something different than a decrease in threshold, it represents an increase in assigned utility with an increase in total interest/buying power for that bid.
+            $\alpha$ and $\beta$ are the variables that need to be set per agent this time. 'v' represents the amount of support a certain bid has. 
+            From the formula it can be determined that a higher value for $\beta$ leads to more influence of the power factor. Comparable to the two exponential models, the value of $\alpha$ determines how strong the power factor should influence the utility of a bid \textit{over time}.
+            In \autoref{fig:powersurface} the multiplier value for a certain bid with a given support 'v' at a certain time during the negotiation 't' can be found for set values of the agent being $\beta$ = 6 and $\alpha$ = 3.
