@@ -1,0 +1,88 @@
+{
+	"LinearAdditiveUtilitySpace": {
+		"name": "BuyerA",
+		"domain": {
+			"name": "electronics",
+			"issuesValues": {
+				"genericelectronicsco_resistor_5K_5%": {
+					"values": [
+						"10_100_$0.29",
+						"100_1K_$0.19",
+						"1K_5K_$0.15",
+						"5K+_$0.12"
+					]
+				},
+				"genericelectronicsco_resistor_5K_1%": {
+					"values": [
+						"10_100_$0.32",
+						"100_1K_$0.22",
+						"1K_5K_$0.16",
+						"5K+_$0.13"
+					]
+				},
+				"shadyelectronicsco_resistor_5K_5%": {
+					"values": [
+						"10_100_$0.39",
+						"100_1K_$0.22",
+						"1K_10K_$0.16",
+						"10K+_$0.11"
+					]
+				},
+				"shadyelectronicsco_resistor_5K_1%": {
+					"values": [
+						"1_100_$0.40",
+						"100_1K_$0.32",
+						"1K_5K_$0.27"
+					]
+				}
+			}
+		},
+		"issueWeights": {
+			"genericelectronicsco_resistor_5K_5%" : 0.1,
+			"genericelectronicsco_resistor_5K_1%" : 0.1,
+			"shadyelectronicsco_resistor_5K_5%" : 0.4,
+			"shadyelectronicsco_resistor_5K_1%" :0.4
+		},
+		"issueUtilities": {
+			"genericelectronicsco_resistor_5K_5%": {
+				"discreteutils": {
+					"valueUtilities": {
+						"10_100_$0.29" : 0.3,
+						"100_1K_$0.19" : 0.6,
+						"1K_5K_$0.15" : 0.8,
+						"5K+_$0.12" : 1.0
+					}
+				}
+			},
+			"genericelectronicsco_resistor_5K_1%": {
+				"discreteutils": {
+					"valueUtilities": {
+						"10_100_$0.32" : 0.2,
+						"100_1K_$0.22" : 0.6,
+						"1K_5K_$0.16" : 0.8,
+						"5K+_$0.13" : 1.0
+					}
+				}
+			},
+			"shadyelectronicsco_resistor_5K_5%": {
+				"discreteutils": {
+					"valueUtilities": {
+						"10_100_$0.39" : 0.0,
+						"100_1K_$0.22" : 0.5,
+						"1K_10K_$0.16" : 0.7,
+						"10K+_$0.11" : 1.0
+					}
+				}
+			},
+			"shadyelectronicsco_resistor_5K_1%": {
+				"discreteutils": {
+					"valueUtilities": {
+						"1_100_$0.40" : 0.0,
+						"100_1K_$0.32" : 0.8,
+						"1K_5K_$0.27" : 1.0
+					}
+				}
+			}
+		}
+	}
+}
